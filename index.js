@@ -11,6 +11,29 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;        // set our port
 
+
+var http = require('http');             //the http server
+//var sys = require("sys");   //for system calls 
+var util = require('util');   //replaces sys
+
+var fs = require('fs'); //moving files
+
+var menu_items = ['home', 'printer', 'files', 'about'];
+var command_output = ''; //this will contain output of commands that we're run with runCommand fuction...
+var files = []; //array of files uploaded
+
+//we need to just to interface with pronsole.py that works perfectly !
+var spawn    = require('child_process').spawn;
+
+///home/pi/printrun/pronsole.py
+//var pronsole = spawn('python', ['/home/pi/printrun/test2.py','']);
+var pronsole = spawn('python', ['/home/pi/printrun/pronsole.py','']);
+
+
+
+
+
+
 // ROUTES FOR OUR API
 // =============================================================================
 var router = express.Router();              // get an instance of the express Router
