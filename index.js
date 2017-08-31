@@ -72,6 +72,45 @@ app.use('/api', router);
 
 
 
+
+
+
+
+console.log('pronsole.py is spawned, waiting 3 seconds and sending connect...');
+setTimeout( function(){
+  //calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
+  pronsole.stdin.write('connect\n');
+}, 3000 );
+
+//console.log('pronsole.py is spawned, waiting 3 seconds and sending monitor...');
+//setTimeout( function(){
+  //calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
+//  pronsole.stdin.write('monitor\n'); //cool this just works like we want -> need some ajax though to feed it back to the browser...
+//}, 3000 );
+
+
+
+pronsole.stdout.on('data', function (data) {
+  console.log( 'pronsole: '+data ); //todo use some ajax to feed it to our browser here...
+});
+
+pronsole.stderr.on('data', function (data) {
+  console.log('pronsole err: ' + data);
+});
+
+pronsole.stdout.on('end', function(data) {
+  pronsole.stdout.end();
+} );
+
+pronsole.on('exit', function (code) {
+  if (code !== 0) {
+    console.log('pronsole process exited with code ' + code);
+  }
+  console.log('pronsole exited!');
+  pronsole.stdin.end(); 
+  //todo just respawn pronsole here!!!
+});
+
 // START THE SERVER
 // =============================================================================
 app.listen(port);
