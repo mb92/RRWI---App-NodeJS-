@@ -21,7 +21,7 @@ var port = process.env.PORT || 3000;        // set our port
 var command_output = ''; //this will contain output of commands that we're run with runCommand fuction...
 var files = []; //array of files uploaded
 
-we need to just to interface with pronsole.py that works perfectly !
+//we need to just to interface with pronsole.py that works perfectly !
 var spawn    = require('child_process').spawn;
 
 ///home/pi/printrun/pronsole.py
