@@ -15,7 +15,7 @@ var fs = require('fs'); 					//moving files
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080;        // set our port
+var port = process.env.PORT || 3000;        // set our port
 
 
 var command_output = ''; //this will contain output of commands that we're run with runCommand fuction...
@@ -28,8 +28,6 @@ var files = []; //array of files uploaded
 // //var pronsole = spawn('python', ['/home/pi/printrun/test2.py','']);
 // var pronsole = spawn('python', ['/home/pi/printrun/pronsole.py','']);
 // //*************************
-
-
 
 // **** Routes for api ****
 // =============================================================================
@@ -49,6 +47,8 @@ app.use('/params', paramsRoute);
 var moveRoute = require('./routes/move');
 app.use('/move', moveRoute);
 
+var bedtempRoute = require('./routes/bedtemp');
+app.use('/bedtemp', bedtempRoute);
 
 
 
