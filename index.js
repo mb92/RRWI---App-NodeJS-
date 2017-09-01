@@ -24,10 +24,10 @@ var files = []; //array of files uploaded
 //we need to just to interface with pronsole.py that works perfectly !
 var spawn    = require('child_process').spawn;
 
-///home/pi/printrun/pronsole.py
-//var pronsole = spawn('python', ['/home/pi/printrun/test2.py','']);
+// ///home/pi/printrun/pronsole.py
+// //var pronsole = spawn('python', ['/home/pi/printrun/test2.py','']);
 var pronsole = spawn('python', ['/home/pi/printrun/pronsole.py','']);
-//*************************
+// //*************************
 
 // **** Routes for api ****
 // =============================================================================
@@ -39,8 +39,8 @@ var router = express.Router();              // get an instance of the express Ro
 // });
 
 //GET:
-var testRoute = require('./routes/test');
-app.use('/test', testRoute);
+// var testRoute = require('./routes/test');
+// app.use('/test', testRoute);
 
 var exitRoute = require('./routes/exit');
 app.use('/exit', exitRoute);
@@ -113,11 +113,11 @@ setTimeout( function(){
   pronsole.stdin.write('connect\n');
 }, 3000 );
 
-console.log('pronsole.py is spawned, waiting 3 seconds and sending monitor...');
-setTimeout( function(){
-  calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
- pronsole.stdin.write('monitor\n'); //cool this just works like we want -> need some ajax though to feed it back to the browser...
-}, 3000 );
+// //console.log('pronsole.py is spawned, waiting 3 seconds and sending monitor...');
+// //setTimeout( function(){
+//   //calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
+// //  pronsole.stdin.write('monitor\n'); //cool this just works like we want -> need some ajax though to feed it back to the browser...
+// //}, 3000 );
 
 
 
