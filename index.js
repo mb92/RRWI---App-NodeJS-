@@ -21,7 +21,7 @@ var port = process.env.PORT || 3000;        // set our port
 var command_output = ''; //this will contain output of commands that we're run with runCommand fuction...
 var files = []; //array of files uploaded
 
-we need to just to interface with pronsole.py that works perfectly !
+//we need to just to interface with pronsole.py that works perfectly !
 var spawn    = require('child_process').spawn;
 
 ///home/pi/printrun/pronsole.py
@@ -113,11 +113,11 @@ setTimeout( function(){
   pronsole.stdin.write('connect\n');
 }, 3000 );
 
-//console.log('pronsole.py is spawned, waiting 3 seconds and sending monitor...');
-//setTimeout( function(){
-  //calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
-//  pronsole.stdin.write('monitor\n'); //cool this just works like we want -> need some ajax though to feed it back to the browser...
-//}, 3000 );
+console.log('pronsole.py is spawned, waiting 3 seconds and sending monitor...');
+setTimeout( function(){
+  calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
+ pronsole.stdin.write('monitor\n'); //cool this just works like we want -> need some ajax though to feed it back to the browser...
+}, 3000 );
 
 
 
