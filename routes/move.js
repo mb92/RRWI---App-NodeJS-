@@ -18,11 +18,11 @@ router.post('/:dir/:dist', function (req, res) {
 	if (!regExpNum.test(distance)) {
 		res.send("Distance is incorrect! Must be an integer.");
 	}
-	
+
 	if (typeof(pronsole) !== 'undefined') {
 		console.log('-- move forward --');
 		pronsole.stdin.write('move ' + direction + ' ' + distance + '\n');
-		res.send('MOVE ' + direction + ' ' + distance);
+		res.send('move ' + direction + ' ' + distance);
 	} 
 
 	res.send('Error! Pronsole object is not defined.');

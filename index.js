@@ -38,9 +38,45 @@ var router = express.Router();              // get an instance of the express Ro
 //     res.json({ message: 'api works' });   
 // });
 
+//GET:
 var testRoute = require('./routes/test');
 app.use('/test', testRoute);
 
+var exitRoute = require('./routes/exit');
+app.use('/exit', exitRoute);
+
+var offRoute = require('./routes/off');
+app.use('/off', offRoute);
+
+var lsRoute = require('./routes/ls');
+app.use('/ls', lsRoute);
+
+var resetRoute = require('./routes/reset');
+app.use('/reset', resetRoute);
+
+var resumeRoute = require('./routes/resume');
+app.use('/resume', resumeRoute);
+
+var gettempRoute = require('./routes/gettemp');
+app.use('/gettemp', gettempRoute);
+
+var printRoute = require('./routes/print');
+app.use('/print', printRoute);
+
+var etaRoute = require('./routes/eta');
+app.use('/eta', etaRoute);
+
+var monitorRoute = require('./routes/monitor');
+app.use('/monitor', monitorRoute);
+
+var monitor2Route = require('./routes/monitor2');
+app.use('/monitor2', monitor2Route);
+
+var disconnectRoute = require('./routes/disconnect');
+app.use('/disconnect', disconnectRoute);
+
+
+//POST:
 var paramsRoute = require('./routes/params');
 app.use('/params', paramsRoute);
 
@@ -50,10 +86,23 @@ app.use('/move', moveRoute);
 var bedtempRoute = require('./routes/bedtemp');
 app.use('/bedtemp', bedtempRoute);
 
+var settempRoute = require('./routes/settemp');
+app.use('/settemp', settempRoute);
 
+var homeRoute = require('./routes/home');
+app.use('/home', homeRoute);
 
+var extrudeRoute = require('./routes/extrude');
+app.use('/extrude', extrudeRoute);
 
+var reverseRoute = require('./routes/reverse');
+app.use('/reverse', reverseRoute);
 
+var uploadRoute = require('./routes/upload');
+app.use('/upload', uploadRoute);
+
+var sdprintRoute = require('./routes/sdprint');
+app.use('/sdprint', sdprintRoute);
 
 // register routes - all of our routes will be prefixed with /api
 

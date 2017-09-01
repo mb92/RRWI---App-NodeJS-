@@ -9,9 +9,9 @@ router.post('/:temp', function (req, res) {
 
 	if(regExpAlpha.test(temp) || regExpNum.test(temp)) {
 		if (typeof(pronsole) !== 'undefined') {
-			pronsole.stdin.write('bedtemp ' + temp + '\n');
-			console.log('-- set bed temperature on: ' + temp + ' --');
-			res.send('bedtemp ' + temp + '\n');
+			pronsole.stdin.write('settemp ' + temp + '\n');
+			console.log('-- set hotendtemp temperature on: ' + temp + ' --');
+			res.send('settemp ' + temp + '\n');
 		} 
 
 		res.send('Error! Pronsole object is not defined.');
