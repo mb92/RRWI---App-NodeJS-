@@ -9,7 +9,7 @@ router.post('/:axis', function (req, res) {
 		res.send("axis are incorrect! Must be from: x, y, z, e");
 	}
 	
-	if (typeof(pronsole) !== 'undefined') {
+	if(pronsole) {
 		console.log('-- home ' + axis + ' --');
 		pronsole.stdin.write('home ' + axis + '\n');
 		res.send('home ' + axis);
