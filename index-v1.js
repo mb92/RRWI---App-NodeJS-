@@ -27,23 +27,32 @@ var files = []; //array of files uploaded
 var spawn    = require('child_process').spawn;
 var pronsole = spawn('python', ['/home/pi/printrun/pronsole.py','']);
 
-var turnOn = null;
-var turnOff = null;
-
 var jsonParser = bodyParser.json({limit:'50mb', type:'application/json'});
 var urlencodedParser = bodyParser.urlencoded({ extended:true, limit:'50mb', type:'application/x-www-form-urlencoding' })
 // //*************************
 // 
 
+function runCommand( command, args, dir ){
+  //var spawn   = require('child_process').spawn;
+  var command = spawn(command, [args, dir]);
 
-if ( typeof pronsole == 'undefined' && !pronsole )
-{
- 	return res.send('Error! Pronsole object is not defined.');
+  command_output = '';
+  command.stdout.on('data', function (data) {
+    console.log('stdout: ' + data);
+    command_output = command_output+ data;
+  });
+
+  command.stderr.on('data', function (data) {
+    //console.log('stderr: ' + data);
+    command_output = command_output + data;
+  });
+
+  command.on('exit', function (code) {
+    //console.log('child process exited with code ' + code);
+    files = command_output.toString().split('\n');
+    files.splice(files.length-1,1); //removes last empty entry here...
+  });
 }
-
-
-
-
 
 // **** Routes for api ****
 // =============================================================================
@@ -52,27 +61,7 @@ app.get('/', function(req, res) {
 });
 
 
-app.get('/turnOn', function(req, res) {
-    var turnOn = spawn('python', ['/home/pi/rrwi/py/on.py','']);   
-});
-
-app.get('/turnOff', function(req, res) {
-    var turnOn = spawn('python', ['/home/pi/rrwi/py/off.py','']);
-});
-
 //GET:
-// == /off
-app.get('/off', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('off \n');
-		console.log('-- off --');
-		// return res.send('off\n');
-		res.sendStatus(200);
-	} 
-
-	return res.send('Error! Pronsole object is not defined.');
-});
-
 // == /exit
 app.get('/exit', function (req, res) {
 	if(pronsole) {
@@ -137,19 +126,6 @@ app.get('/pause', function (req, res) {
 	return res.send('Error! Pronsole object is not defined.');
 });
 
-// == /cooldown
-app.get('/cooldown', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('settemp 0 \n');
-		pronsole.stdin.write('bedtemp 0 \n');
-		console.log('-- cooldown --');
-		return res.send('cooldown\n');
-	} 
-
-	return res.send('Error! Pronsole object is not defined.');
-});
-
-
 // == /resume
 app.get('/resume', function (req, res) {
 	if(pronsole) {
@@ -161,55 +137,27 @@ app.get('/resume', function (req, res) {
 	return res.send('Error! Pronsole object is not defined.');
 });
 
-var textChunk = null;
-// == /gettemp
-app.get('/status', function (req, res) {
-    res.send('Node RRWI API is running');
-});
-
 // == /gettemp
 app.get('/gettemp', function (req, res) {
-    if(pronsole) {
-        pronsole.stdin.write('gettemp \n');
-        pronsole.stdout.on('data',function(chunk){
+	if(pronsole) {
+		pronsole.stdin.write('gettemp \n');
+		console.log('-- gettemp --');
+		return res.send('gettemp\n');
+	} 
 
-        textChunk = chunk.toString('utf8');// buffer to string
-        console.log(textChunk);
-        });
-        console.log('-- gettemp --');
-        // res.json({asd : 'llll'});
-        // res.json({ message: textChunk });
-    }
-
-    res.send('Error! Pronsole object is not defined.');
-});
-
-app.get('/eta', function (req, res) {
-    if(pronsole) {
-        pronsole.stdin.write('eta \n');
-        pronsole.stdout.on('data',function(chunk){
-
-        textChunk = chunk.toString('utf8');// buffer to string
-        console.log(textChunk);
-        });
-        console.log('-- eta --');
-        res.send(textChunk);
-        // res.json({ message: textChunk });
-    }
-
-    res.send('Error! Pronsole object is not defined.');
+	return res.send('Error! Pronsole object is not defined.');
 });
 
 // == /eta
-// app.get('/eta', function (req, res) {
-// 	if(pronsole) {
-// 		pronsole.stdin.write('eta \n');
-// 		console.log('-- eta --');
-// 		return res.send('eta\n');
-// 	} 
+app.get('/eta', function (req, res) {
+	if(pronsole) {
+		pronsole.stdin.write('eta \n');
+		console.log('-- eta --');
+		return res.send('eta\n');
+	} 
 
-// 	return res.send('Error! Pronsole object is not defined.');
-// });
+	return res.send('Error! Pronsole object is not defined.');
+});
 
 // == /monitor
 app.get('/monitor', function (req, res) {
@@ -399,15 +347,12 @@ app.post('/upload', jsonParser, function(req, res) {
 
     var file = req.body.name;
 	var b64 = req.body.b64;
-	var path = req.body.path;
-
 	var regExpAlpha = /[a-zA-Z0-9*]/;
 
 
 	var b = new Buffer(b64, 'base64')
 	var gcode = b.toString();
 
-	// fs.writeFile(path + file + ".gcode", gcode, function(err) {
 	fs.writeFile("/home/pi/rrwi/tmp/" + file + ".gcode", gcode, function(err) {
 	    if(err) {
 	        return res.send(err);
