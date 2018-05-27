@@ -22,10 +22,16 @@ var cors = require('cors');
 
 var app = express();
 // jsonParser = bodyParser.json();
+<<<<<<< HEAD
 
 app.use(cors());
 app.options('*', cors());
 // app.use(cors({origin: 'http://rrwi.loc'}));
+=======
+app.use(cors());
+
+
+>>>>>>> 84a8a1562980ff0a27cf5ed8cdbb5cbd69fdbe20
 var port = process.env.PORT || 3000;        // set our port
 
 
@@ -52,11 +58,15 @@ if ( typeof pronsole == 'undefined' && !pronsole )
 }
 
 
+<<<<<<< HEAD
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 //   next();
 // });
+=======
+
+>>>>>>> 84a8a1562980ff0a27cf5ed8cdbb5cbd69fdbe20
 
 
 // **** Routes for api ****
