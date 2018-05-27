@@ -24,7 +24,7 @@ var app = express();
 // jsonParser = bodyParser.json();
 
 app.use(cors());
-app.options('*', cors())
+app.options('*', cors());
 // app.use(cors({origin: 'http://rrwi.loc'}));
 var port = process.env.PORT || 3000;        // set our port
 
