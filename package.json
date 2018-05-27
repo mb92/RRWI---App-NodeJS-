@@ -1,0 +1,32 @@
+{
+  "name": "rrwi-node",
+  "version": "1.0.0",
+  "description": "API module for pronsole.py based on printerface.js Walters Schreppers",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "-"
+  },
+  "keywords": [
+    "node",
+    "printer3d",
+    "pronsole",
+    "controller",
+    "api"
+  ],
+  "author": "Maciej Borowiec",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "formidable": "^1.1.1",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "json-stringify-safe": "^5.0.1",
+    "raspberry-pi-mjpeg-server": "^1.0.0",
+    "util": "^0.10.3"
+  }
+}

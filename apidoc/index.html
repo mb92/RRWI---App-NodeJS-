@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>API doc - RepRapWebInterfejs</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
+ 
+        <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                $('#example').DataTable();
+            } );
+        </script>
+
+        <style type="text/css">
+            body {
+                font-size: 12px;
+            }
+
+            h1 {
+                margin: 80px;
+            }
+            
+            code {
+                display:block;
+            }
+            
+            footer {
+                margin-top:40px;
+                margin-bottom: 40px;
+            }
+
+            .url {
+                font-weight: bold;
+                color: #337ab7;
+            }
+            
+            .example-url {
+                color: #3c763d;
+                font-weight: bold;
+            }
+
+            #params {
+                min-width: 190px;
+            }
+
+            #example {
+                min-width: 240px;
+            }
+
+            #methods {
+                
+            }
+
+        </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1>API doc - RepRapWebInterfejs</h1>
+        </div> 
+    </div>
+</div>
+<div class="container">
+
+<table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th id="url">URL</th>
+                <th id="methods">Methods</th>
+                <th id="params">Params</th>
+                <th id="desc">Descriptions</th>
+                <th id="example">Example</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>URL</th>
+                <th>Methods</th>
+                <th>Params</th>
+                <th>Descriptions</th>
+                <th>Example</th>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr>
+                <td>
+                    <span class="url">/connect/P/B</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    connect / &lt;X&gt;
+                    </code> 
+                    <br/>
+                    P - name of port (string) <br/>
+                    B &isin; Z (Integer)
+                </td>
+                <td>
+                    Connect to printer<br/>
+                    connect &lt;port&gt; &lt;baudrate&gt;<br/>
+                    If port and baudrate are not specified, connects to first detected port at 115200bps<br/>
+                </td>
+                <td>
+                <span class="example-url">/connect/portname/14400</span> <i>(turn off heating)</i><br>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="url">/bedtemp/X</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    bedtemp / &lt;X&gt;
+                    </code> 
+                    <br/>
+                    X [<sup>o</sup>C]<br/>
+                    X &isin; [0, max] &cup; {'abs', 'pla', 'off'}
+                    X (String)
+                </td>
+                <td>
+                    Sets the bed temperature to the value entered.
+                    Enter either a temperature in celsius or one of the following keywords
+                    abs(110), off(0), pla(60) bedtemp 120 bedtemp 0
+                </td>
+                <td>
+                <span class="example-url">/bedtemp/off</span> <i>(turn off heating)</i><br>
+                <span class="example-url">/bedtemp/abs</span> <i>(set temp for abs 110)</i><br>
+                <span class="example-url">/bedtemp/120</span> <i>(set 120 <sup>o</sup>C)</i><br/>
+                <span class="example-url">/bedtemp/0</span>   <i>(set the same as off value)</i>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="url">/settemp/X</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    settemp / &lt;X&gt;
+                    </code> 
+                    <br/>
+                    X [<sup>o</sup>C]<br/>
+                    X &isin; [0, max] &cup; {'abs', 'pla', 'off'}
+                    X (String)
+                </td>
+                <td>
+                    Sets the hotend temperature to the value entered.
+                    Enter either a temperature in celsius or one of the following keywords
+                    abs(230), off(0), pla(185)
+                </td>
+                <td>
+                <span class="example-url">/settemp/off</span> <i>(turn off heating)</i><br>
+                <span class="example-url">/settemp/abs</span> <i>(set temp for abs 110)</i><br>
+                <span class="example-url">/settemp/120</span> <i>(set 120 <sup>o</sup>C)</i><br/>
+                <span class="example-url">/settemp/0</span>   <i>(set the same as off value)</i>
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/exit</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Disconnects from the printer and exits the program.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="url">/home/A</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    home / &lt;A&gt;
+                    </code> 
+                    <br/>
+                    A &isin; {'x', 'y', 'z', 'xy', 'e', 'xyze', 'xyz', 'xz, 'yz'}
+                    A (String)
+                </td>
+                <td>
+                    Homes the printer<br/>
+                    null (without params) - homes all axes and zeroes the extruder(Using G28 and G92)<br/><br/>
+                    x - homes x axis only (Using G28)<br/>
+                    y - homes y axis only (Using G28)<br/>
+                    xy - homes x and y axes (Using G28)<br/>
+                    z - homes z axis only (Using G28)<br/>
+                    e - set extruder position to zero (Using G92)<br/>
+                    xyze - homes all axes and zeroes the extruder (Using G28 and G92)<br/>
+                </td>
+                <td>
+                <span class="example-url">/home</span> <br/>
+                <span class="example-url">/home/x</span> <br>
+                <span class="example-url">/home/xy</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="url">/move/A/B/C</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    move / &lt;A&gt; / &lt;B&gt; / &lt;C&gt;
+                    </code> 
+                    <br/>
+                    A &isin; {'x', 'y', 'z'} (String)<br/>
+                    B &isin; [0, max] (Integer)<br/>
+                    C &isin; [0, max] (Integer)
+                </td>
+                <td>
+                    Move an axis. Specify the name of the axis and the amount. <br/>
+                    move X 10 will move the X axis forward by 10mm at 3000 mm/min (default XY speed)<br/>
+                    move Y 10 5000 will move the Y axis forward by 10mm at 5000mm/min<br/>
+                    move Z -1 will move the Z axis down by 1mm at 100 mm/min (default Z speed)<br/>
+                    Common amounts are in the tabcomplete list.<br/>
+                </td>
+                <td>
+                <span class="example-url">/move/X/10</span> <br>
+                <span class="example-url">/move/X/10/3000</span> <br>
+                <span class="example-url">/move/Y/20</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/resume</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Resumes a paused print.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/upload</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Uploads a gcode file to the sd card.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr class="danger">
+                <td>
+                    <span class="url">/set/A/B</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    set / &lt;A&gt; / &lt;B&gt; 
+                    </code> 
+                    <br/>
+                    A &isin; {'x', 'y', 'z'} (String)<br/>
+                    B &isin; [0, max] (Integer)<br/>
+                    C &isin; [0, max] (Integer)
+                </td>
+                <td>
+                    Set variable:   set <variable> <value>
+                    Show variable:  set <variable>
+                    'set' without arguments displays all variables
+                </td>
+                <td>
+                <span class="example-url">/set/X/10</span> <br>
+                <span class="example-url">/set/X/10</span> <br>
+                <span class="example-url">/set/Y/20</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="url">/extrude/A/B</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    extrude / &lt;A&gt; / &lt;B&gt;
+                    </code> 
+                    <br/>
+                    A &isin; (-&infin;, &infin;+) - length of fiament [mm] (Integer)<br/>
+                    B &isin; [-max;, max] - acceleration [mm/min] (Integer)<br/>
+                </td>
+                <td>
+                    Extrudes a length of filament, 5mm by default, or the number of mm given as a parameter<br/>
+                    extrude - extrudes 5mm of filament at 300mm/min (5mm/s)<br/>
+                    extrude 20 - extrudes 20mm of filament at 300mm/min (5mm/s)<br/>
+                    extrude -5 - REVERSES 5mm of filament at 300mm/min (5mm/s)<br/>
+                    extrude 10 210 - extrudes 10mm of filament at 210mm/min (3.5mm/s)<br/>
+                    of mm given as a parameterh of filament, 5mm by default, or the number<br/>
+                </td>
+                <td>
+                <span class="example-url">/extrude/-5</span> <br>
+                <span class="example-url">/extrude/10</span> <br>
+                <span class="example-url">/extrude/15/200</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/load</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Loads a gcode file (with tab-completion)
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/off</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Turns off everything on the printer
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span class="url">/reverse/A/B</span> 
+                </td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    reverse / &lt;A&gt; / &lt;B&gt;
+                    </code> 
+                    <br/>
+                    A &isin; (-&infin;, &infin;+) - length of fiament [mm] (Integer)<br/>
+                    B &isin; [-max;, max] - acceleration [mm/min] (Integer)<br/>
+                </td>
+                <td>
+                    Reverses the extruder, 5mm by default, or the number of mm given as a parameter<br/>
+                    reverse - reverses 5mm of filament at 300mm/min (5mm/s)<br/>
+                    reverse 20 - reverses 20mm of filament at 300mm/min (5mm/s)<br/>
+                    reverse 10 210 - extrudes 10mm of filament at 210mm/min (3.5mm/s)<br/>
+                    reverse -5 - EXTRUDES 5mm of filament at 300mm/min (5mm/s)<br/>
+                </td>
+                <td>
+                <span class="example-url">/reverse/-5</span> <br>
+                <span class="example-url">/reverse/10</span> <br>
+                <span class="example-url">/reverse/15/200</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/gcodes</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Gcodes are passed through to the printer as they are.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/ls</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Lists files on the SD card
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/pause</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Pauses a running print
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/disconnect </span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Disconnects from the printer 
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/gettemp</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Read the extruder and bed temperature.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/print</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Send a loaded gcode file to the printer. Load a file with the load command first.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/eta</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Displays estimated remaining print time.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/monitor</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Monitor a machine's temperatures and an SD print's status.<br/>
+                    monitor - Reports temperature and SD print status (if SD printing) every 5 seconds<br/>
+                    monitor 2 - Reports temperature and SD print status (if SD printing) every 2 seconds
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/reset</span></td>
+                <td align="center">GET</td>
+                <td>
+                    - 
+                </td>
+                <td>
+                    Resets the printer.
+                </td>
+                <td>
+                -
+                </td>
+            </tr>
+
+            <tr>
+                <td><span class="url">/sdprint/N</span></td>
+                <td align="center">POST</td>
+                <td>
+                    <code>
+                    N - file name (String)
+                    </code>
+                </td>
+                <td>
+                    Print a file from the SD card. Tab completes with available file names.
+                    sdprint filename.g
+                </td>
+                <td>
+                sdprint filename.gcode
+                </td>
+            </tr>
+        </tbody>
+    </table>
+            </div>
+
+<script type="text/javascript">
+    // For demo to fit into DataTables site builder...
+    $('#example')
+        .removeClass( 'display' )
+        .addClass('table table-striped table-bordered');
+</script>
+
+<footer>
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-sm-12 text-center">
+                Prepared by Maciej Borowiec
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+
