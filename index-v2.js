@@ -9,8 +9,8 @@ var util = require('util');   				//replaces sys
 var fs = require('fs'); 					//moving filess
 var cors = require('cors');
 
-var Gpio = require('onoff').Gpio;
-// var gpio = require('rpi-gpio');
+
+
 
 //*************************
 
@@ -22,11 +22,16 @@ var Gpio = require('onoff').Gpio;
 
 var app = express();
 // jsonParser = bodyParser.json();
+<<<<<<< HEAD
 
 app.use(cors());
 app.options('*', cors());
 // app.use(cors({origin: 'http://rrwi.loc'}));
+=======
+app.use(cors());
 
+
+>>>>>>> 84a8a1562980ff0a27cf5ed8cdbb5cbd69fdbe20
 var port = process.env.PORT || 3000;        // set our port
 
 
@@ -40,7 +45,6 @@ var streaming = require('./cam.js');
 
 var turnOn = null;
 var turnOff = null;
-var pinState = new Gpio(23, 'out');
 
 var jsonParser = bodyParser.json({limit:'50mb', type:'application/json'});
 var urlencodedParser = bodyParser.urlencoded({ extended:true, limit:'50mb', type:'application/x-www-form-urlencoding' })
@@ -54,25 +58,33 @@ if ( typeof pronsole == 'undefined' && !pronsole )
 }
 
 
+<<<<<<< HEAD
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
+=======
+
+>>>>>>> 84a8a1562980ff0a27cf5ed8cdbb5cbd69fdbe20
+
+
 // **** Routes for api ****
 // =============================================================================
 app.get('/', function(req, res) {
     return res.json({ message: 'Welcome in RepRapWebInterface API' });   
 });
 
-// Power controll
-app.get('/powerStatus', function(req, res) {
-     var st = pinState.readSync();
-     return res.json({ 'message': st });
-	// var numPin = 23;
-	// var pinState = gpio.setup(23, gpio.DIR_HIGH, readInput);
- 
-	// function readInput() {
-	//     gpio.read(23, function(err, value) {
-	//         // console.log('The value is ' + value);
-	//         return res.json({ 'message': value });
-	//     });
-	// }
+app.get('/cameraOn', function(req, res) {
+   var streaming = require('./cam.js');  
+   // res.send("Camera is turn on");
+   return res.json({ message: "Camera is turn ON"});
+});
+
+app.get('/cameraOff', function(req, res) {
+   var streaming = null;  
+   // res.send("Camera is turn off");
+   return res.json({ message: "Camera is turn OFF"});
 });
 
 app.get('/turnOn', function(req, res) {
@@ -86,26 +98,6 @@ app.get('/turnOff', function(req, res) {
     // res.send("Power OFF");
     return res.json({ message: "Power OFF"});
 });
-
-// end: Power Controll
-
-// Camera
-app.get('/cameraOn', function(req, res) {
-   var streaming = require('./cam.js');  
-   // res.send("Camera is turn on");
-   return res.json({ message: "Camera is turn ON"});
-});
-
-app.get('/cameraOff', function(req, res) {
-   var streaming = null;  
-   // res.send("Camera is turn off");
-   return res.json({ message: "Camera is turn OFF"});
-});
-
-// end: Camera
-
-
-
 
 //GET:
 // == /off
