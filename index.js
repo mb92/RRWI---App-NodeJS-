@@ -40,7 +40,7 @@ var streaming = require('./cam.js');
 
 var turnOn = null;
 var turnOff = null;
-var pinState = new Gpio(23, 'out');
+var pinState = new Gpio(18, 'out');
 
 var jsonParser = bodyParser.json({limit:'50mb', type:'application/json'});
 var urlencodedParser = bodyParser.urlencoded({ extended:true, limit:'50mb', type:'application/x-www-form-urlencoding' })
@@ -62,17 +62,15 @@ app.get('/', function(req, res) {
 
 // Power controll
 app.get('/powerStatus', function(req, res) {
-     var st = pinState.readSync();
-     return res.json({ 'message': st });
-	// var numPin = 23;
-	// var pinState = gpio.setup(23, gpio.DIR_HIGH, readInput);
- 
-	// function readInput() {
-	//     gpio.read(23, function(err, value) {
-	//         // console.log('The value is ' + value);
-	//         return res.json({ 'message': value });
-	//     });
-	// }
+     // var st = pinState.readSync();
+     // return res.json({ 'message': st });
+    var filename = '/home/pi/rrwi/py/power_status.txt';
+ 	fs.readFile(filename, 'utf8', function(err, data) {
+  	if (err) throw err;
+		console.log('OK: ' + filename);
+		console.log(data)
+		return res.json({ 'message': data });
+	});
 });
 
 app.get('/turnOn', function(req, res) {
