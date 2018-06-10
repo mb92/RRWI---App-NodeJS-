@@ -10,7 +10,6 @@ var fs = require('fs'); 					//moving filess
 var cors = require('cors');
 
 var Gpio = require('onoff').Gpio;
-// var gpio = require('rpi-gpio');
 
 //*************************
 
@@ -112,7 +111,7 @@ app.get('/off', function (req, res) {
 		pronsole.stdin.write('off \n');
 		console.log('-- off --');
 		// return res.send('off\n');
-		res.sendStatus(200);
+		// res.sendStatus(200);
 	} 
 
 	return res.send('Error! Pronsole object is not defined.');
@@ -206,6 +205,14 @@ app.get('/resume', function (req, res) {
 	return res.send('Error! Pronsole object is not defined.');
 });
 
+// == /print
+app.get('/print', function (req, res) {
+    pronsole.stdin.write( 'print \n' );
+
+	return res.send('Start printing!');
+});
+
+
 var textChunk = null;
 // == /gettemp
 app.get('/status', function (req, res) {
@@ -291,6 +298,28 @@ app.get('/disconnect', function (req, res) {
 
 
 // //POST:
+
+// == /connect/..
+app.post('/connect/:port/:baud', function (req, res) {
+	var port = req.params.port; 
+	var baud = req.params.baud; 
+	var regExpAlpha = /(off)|(abs)|(pla)/;
+	var regExpNum = /[0-9*]/;
+
+	// if(regExpAlpha.test(temp) || regExpNum.test(temp)) {
+		if(pronsole) {
+			pronsole.stdin.write('connect ' + port + ' ' + baud + '\n');
+			console.log('-- connect: ' + port + ' ' + baud + ' --');
+			return res.send('connect ' + port + ' ' + baud + '\n');
+		} 
+
+		return res.send('Error! Pronsole object is not defined.');
+	// } else {
+	// 	return res.send("Temperature is incorrect! Must be: abs, pla, off or integer's value");
+	// }
+});
+
+
 // == /move/..
 app.post('/move/:dir/:dist/:acc?', function (req, res) {
 	var direction = req.params.dir;
@@ -452,24 +481,27 @@ app.post('/upload', jsonParser, function(req, res) {
 	var b = new Buffer(b64, 'base64')
 	var gcode = b.toString();
 
+	var fileName = "/home/pi/rrwi/tmp/" + file;
+
 	// fs.writeFile(path + file + ".gcode", gcode, function(err) {
-	fs.writeFile("/home/pi/rrwi/tmp/" + file + ".gcode", gcode, function(err) {
+	fs.writeFile(fileName, gcode, function(err) {
 	    if(err) {
 	        return res.send(err);
+	    } else {
+
+    		if(pronsole) {
+				console.log('-- load ' + fileName + ' --');
+				pronsole.stdin.write('load ' + fileName + '\n');
+				
+			} 
+				// return res.send('load ' + fileName);
 	    }
 	}); 
 
 	res.sendStatus(200);
 });
 
-// == /print
-app.post('/print/:name', function (req, res) {
-	var file = req.params.name;
-    pronsole.stdin.write( 'load /home/pi/rrwi/tmp/' + file + '.gcode\n' );
-    pronsole.stdin.write( 'print \n' );
 
-	return res.send('sed.');
-});
 
 // == /sdprint/..
 app.post('/sdprint/:file', function (req, res) {
