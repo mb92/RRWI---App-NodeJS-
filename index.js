@@ -79,6 +79,7 @@ app.get('/turnOn', function(req, res) {
 });
 
 app.get('/turnOff', function(req, res) {
+	pronsole.stdin.write('reset \n');
     var turnOn = spawn('python', ['/home/pi/rrwi/py/off.py','']);
     // res.send("Power OFF");
     return res.json({ message: "Power OFF"});
@@ -105,21 +106,11 @@ app.get('/cameraOff', function(req, res) {
 
 
 //GET:
-// == /off
-app.get('/off', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('off \n');
-		console.log('-- off --');
-		// return res.send('off\n');
-		// res.sendStatus(200);
-	} 
-
-	return res.send('Error! Pronsole object is not defined.');
-});
-
 // == /exit
 app.get('/exit', function (req, res) {
 	if(pronsole) {
+		pronsole.stdin.write('reset \n');
+		pronsole.stdin.write('off \n');
 		pronsole.stdin.write('exit \n');
 		console.log('-- exit --');
 		return res.send('exit\n');
