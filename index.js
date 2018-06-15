@@ -11,6 +11,8 @@ var cors = require('cors');
 
 var Gpio = require('onoff').Gpio;
 
+require('colors');
+
 //*************************
 
 // **** Configure ****
@@ -45,6 +47,18 @@ var jsonParser = bodyParser.json({limit:'50mb', type:'application/json'});
 var urlencodedParser = bodyParser.urlencoded({ extended:true, limit:'50mb', type:'application/x-www-form-urlencoding' })
 // //*************************
 // 
+
+pronsole.stdout.setEncoding('utf8');
+
+pronsole.stdout.on('data', (buffer) => {
+	console.log('ondata'.red, buffer.toString('utf8'));
+})
+
+function sendBufferToResponse(res, buffer) {
+	return res.json({
+		message: buffer.toString('utf8')
+	});
+}
 
 
 if ( typeof pronsole == 'undefined' && !pronsole )
@@ -212,20 +226,26 @@ app.get('/status', function (req, res) {
 
 // == /gettemp
 app.get('/gettemp', function (req, res) {
-    if(pronsole) {
-        pronsole.stdin.write('gettemp \n');
-        pronsole.stdout.on('data',function(chunk){
+		console.log("Receiving gettemp");
+        pronsole.stdin.write('gettemp\n');
 
-        textChunk = chunk.toString('utf8');// buffer to string
-        console.log(textChunk);
-        });
-        console.log('-- gettemp --');
+
+        pronsole.stdout.on('data', (data) => {
+        	console.log("HEADS SENT".green, res.headersSent);
+        	sendBufferToResponse(res, data);
+        	// res.send(data);
+		});
+    });
+
+        // pronsole.stdout.on('data',function(chunk){
+
+        // textChunk = chunk.toString('utf8');// buffer to string
+        // console.log(textChunk);
+        // });
+        // console.log('-- gettemp --');
         // res.json({asd : 'llll'});
         // res.json({ message: textChunk });
-    }
 
-    res.send('Error! Pronsole object is not defined.');
-});
 
 app.get('/eta', function (req, res) {
     if(pronsole) {
