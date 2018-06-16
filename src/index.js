@@ -9,13 +9,11 @@ var util = require('util');   				//replaces sys
 var fs = require('fs'); 					//moving filess
 var cors = require('cors');
 
-var Gpio = require('onoff').Gpio;
+// var Gpio = require('onoff').Gpio;
 
 require('colors');
 
-const commands = require('./commands');
 
-console.log("COMMANDS".red, commands);
 
 //*************************
 
@@ -45,7 +43,7 @@ var streaming = require('./cam.js');
 
 var turnOn = null;
 var turnOff = null;
-var pinState = new Gpio(18, 'out');
+// var pinState = new Gpio(18, 'out');
 
 var jsonParser = bodyParser.json({limit:'50mb', type:'application/json'});
 var urlencodedParser = bodyParser.urlencoded({ extended:true, limit:'50mb', type:'application/x-www-form-urlencoding' })
@@ -54,15 +52,23 @@ var urlencodedParser = bodyParser.urlencoded({ extended:true, limit:'50mb', type
 
 pronsole.stdout.setEncoding('utf8');
 
+
+// Import commands when pronsole object is ready
+const commands = require('./commands')(pronsole);
+console.log('COMMANDS AVAILABLE:'.bgBlue.white)
+commands.forEach(([name]) => console.log(`- ${name}`.blue))
+
+
 pronsole.stdout.on('data', (buffer) => {
 	console.log('ondata'.red, buffer.toString('utf8'));
 })
 
-function sendBufferToResponse(res, buffer) {
-	return res.json({
-		message: buffer.toString('utf8')
-	});
-}
+
+// function sendBufferToResponse(res, buffer) {
+// 	return res.json({
+// 		message: buffer.toString('utf8')
+// 	});
+// }
 
 
 if ( typeof pronsole == 'undefined' && !pronsole )
@@ -230,15 +236,17 @@ app.get('/status', function (req, res) {
 
 // == /gettemp
 app.get('/gettemp', function (req, res) {
-		console.log("Receiving gettemp");
-        pronsole.stdin.write('gettemp\n');
+    // For now this way, in future, we will change this to binding method
+    commands.gettemp();
+		// console.log("Receiving gettemp");
+        // pronsole.stdin.write('gettemp\n');
 
 
-        pronsole.stdout.on('data', (data) => {
-        	console.log("HEADS SENT".green, res.headersSent);
-        	sendBufferToResponse(res, data);
-        	// res.send(data);
-		});
+        // pronsole.stdout.on('data', (data) => {
+        // 	console.log("HEADS SENT".green, res.headersSent);
+        // 	sendBufferToResponse(res, data);
+        // 	// res.send(data);
+		// });
     });
 
         // pronsole.stdout.on('data',function(chunk){
@@ -385,19 +393,23 @@ app.post('/bedtemp/:temp', function (req, res) {
 
 // == /settemp/..
 app.post('/settemp/:temp', function (req, res) {
-	var temp = req.params.temp; 
-
+    var temp = req.params.temp; 
+    
 	var regExpAlpha = /(off)|(abs)|(pla)/;
 	var regExpNum = /[0-9*]/;
 
 	if(regExpAlpha.test(temp) || regExpNum.test(temp)) {
-		if(pronsole) {
-			pronsole.stdin.write('settemp ' + temp + '\n');
-			console.log('-- set hotendtemp temperature on: ' + temp + ' --');
-			return res.send('settemp ' + temp + '\n');
-		} 
+        commands.settemp({ temp: temp })
+        //I think pronsole will always be true here
+        return res.send('settemp ' + temp + '\n');
+		// if(pronsole) {
 
-		return res.send('Error! Pronsole object is not defined.');
+
+		// 	// pronsole.stdin.write('settemp ' + temp + '\n');
+		// 	// console.log('-- set hotendtemp temperature on: ' + temp + ' --');
+		// } 
+
+		// return res.send('Error! Pronsole object is not defined.');
 	} else {
 		return res.send("Temperature is incorrect! Must be: abs, pla, off or integer's value");
 	}

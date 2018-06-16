@@ -1,3 +1,3 @@
 const funcs = require('./funcs');
 
-module.exports = Object.keys(funcs).map(key => [ key, funcs[key] ])
+module.exports = (pronsole) => Object.keys(funcs).map(key => [ key, funcs[key](pronsole) ])
