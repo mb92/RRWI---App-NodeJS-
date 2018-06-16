@@ -13,6 +13,10 @@ var Gpio = require('onoff').Gpio;
 
 require('colors');
 
+const commands = require('./commands');
+
+console.log("COMMANDS".red, commands);
+
 //*************************
 
 // **** Configure ****
