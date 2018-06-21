@@ -8,7 +8,6 @@ const cors = require('cors');
 const spawn = require('child_process').spawn;
 const server = require('http').Server;   				//the http server
 const Gpio = require('onoff').Gpio;
-const streaming = require('./cam.js');
 const socket = require('socket.io');
 
 require('colors');
@@ -16,8 +15,23 @@ require('colors');
 
 // DEFAULT PARAMS
 const port = process.env.PORT || 3000;        // set our port
+const CAM = {
+    PORT: 4000,
+    WIDTH: 480,
+    HEIGHT: 320,
+    TIMEOUT: 50,
+    QUALITY: 10,
+}
 
-
+// START CAM
+const camera = spawn('node', [
+    './node_modules/raspberry-pi-mjpeg-server/raspberry-pi-mjpeg-server.js',
+    '-p', CAM.PORT,
+    '-w', CAM.WIDTH,
+    'l', CAM.HEIGHT,
+    '-t', CAM.TIMEOUT,
+    '-q', CAM.QUALITY,
+])
 
 // APP CONFIGURATION
 const app = express();
@@ -44,26 +58,26 @@ const parsers = require('./parsers');
 
 pronsole.stdout.on('data', data => {
     const stringData = data.toString('utf8');
-
+    
     // Parsers setup
-
+    
     let preResults = Object.keys(parsers).map(parserName => {
         return parsers[parserName](stringData);
     }).filter(el => el)
-
+    
     // console.log("PRERESULTS".green, preResults);
-
+    
     let results = Object.keys(parsers).map(parserName => {
         return parsers[parserName](stringData)
     }).filter(el => el)
-
+    
     // console.log('parsing results'.yellow, results[0]);
     io.emit('status', results[0]);
-
+    
     // if(results && results.length > 0) {
     //     io.emit('status', results);
     // }
-
+    
     io.emit('console', stringData.replace(/.*00m (.*)/g,""));
 });
 
