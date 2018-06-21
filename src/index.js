@@ -41,20 +41,23 @@ pronsole.stdout.setEncoding('utf8');
 
 const parsers = require('./parsers');
 
+
 pronsole.stdout.on('data', data => {
     const stringData = data.toString('utf8');
-    console.log("CONSOLE".blue, stringData);
-    //Tutaj podpinamy parsery
-    console.log('parsers'.yellow, Object.keys(parsers));
 
+    // Parsers setup
     let results = Object.keys(parsers).map(parserName => {
         return parsers[parserName](stringData)
-    })
+    }).filter(el => el)
 
-    console.log("RESULTS".green, results);
+    console.log('parsing results'.yellow, results[0]);
+    io.emit('status', results[0]);
 
+    // if(results && results.length > 0) {
+    //     io.emit('status', results);
+    // }
 
-    io.emit('console', stringData);
+    // io.emit('console', stringData);
 });
 
 
