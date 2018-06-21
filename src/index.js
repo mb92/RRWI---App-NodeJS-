@@ -46,20 +46,33 @@ pronsole.stdout.on('data', data => {
     const stringData = data.toString('utf8');
 
     // Parsers setup
+
+    let preResults = Object.keys(parsers).map(parserName => {
+        return parsers[parserName](stringData);
+    }).filter(el => el)
+
+    // console.log("PRERESULTS".green, preResults);
+
     let results = Object.keys(parsers).map(parserName => {
         return parsers[parserName](stringData)
     }).filter(el => el)
 
-    console.log('parsing results'.yellow, results[0]);
+    // console.log('parsing results'.yellow, results[0]);
     io.emit('status', results[0]);
 
     // if(results && results.length > 0) {
     //     io.emit('status', results);
     // }
 
-    // io.emit('console', stringData);
+    io.emit('console', stringData.replace(/.*00m (.*)/g,""));
 });
 
+
+// Get temp in intervals
+const GETTEMP_INTERVAL_TIME = 1000;
+const getTempInterval = setInterval(() => {
+    commands.gettemp();
+}, GETTEMP_INTERVAL_TIME);
 
 let command_output = ''; //this will contain output of commands that we're run with runCommand fuction...
 let files = []; //array of files uploaded
@@ -140,13 +153,12 @@ app.get('/turnOff', function(req, res) {
 
 // Camera
 app.get('/cameraOn', function(req, res) {
-    var streaming = require('./cam.js');  
     // res.send("Camera is turn on");
     return res.json({ message: "Camera is turn ON"});
 });
 
 app.get('/cameraOff', function(req, res) {
-    var streaming = null;  
+    streaming = null;
     // res.send("Camera is turn off");
     return res.json({ message: "Camera is turn OFF"});
 });
@@ -253,6 +265,16 @@ app.get('/print', function (req, res) {
     
 	return res.send('Start printing!');
 });
+
+
+// == /print
+app.get('/command/:commandname?', function (req, res) {
+    console.log("CMD".blue, req.params.commandname);
+    pronsole.stdin.write(decodeURI(req.params.commandname) + '\n');
+    
+	return res.send('OK');
+});
+
 
 
 var textChunk = null;

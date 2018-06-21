@@ -4,7 +4,7 @@
 program = {}
 
 
-// var program = require('../node_modules/raspberry-pi-mjpeg-server/node_modules/commander');
+var program = require('../node_modules/raspberry-pi-mjpeg-server/node_modules/commander');
 
 program.port = 4000;
 program.width = 480;
