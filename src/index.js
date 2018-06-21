@@ -43,13 +43,13 @@ const parsers = require('./parsers');
 
 pronsole.stdout.on('data', data => {
     const stringData = data.toString('utf8');
-    
+    console.log("CONSOLE".blue, stringData);
     //Tutaj podpinamy parsery
     console.log('parsers'.yellow, Object.keys(parsers));
 
     let results = Object.keys(parsers).map(parserName => {
         return parsers[parserName](stringData)
-    }).filter(el => el)
+    })
 
     console.log("RESULTS".green, results);
 
