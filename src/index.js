@@ -25,7 +25,7 @@ const CAM = {
 
 // START CAM
 const camera = spawn('node', [
-    './node_modules/raspberry-pi-mjpeg-server/raspberry-pi-mjpeg-server.js',
+    '../node_modules/raspberry-pi-mjpeg-server/raspberry-pi-mjpeg-server.js',
     '-p', CAM.PORT,
     '-w', CAM.WIDTH,
     'l', CAM.HEIGHT,
