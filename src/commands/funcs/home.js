@@ -5,6 +5,6 @@
  */
 module.exports = (pronsole) => (params) => {
 
-       pronsole.stdin.write('home ' + axis + '\n');
-    
+       pronsole.stdin.write('home ' + params + '\n');
+
 };
