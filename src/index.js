@@ -9,6 +9,7 @@ const spawn = require('child_process').spawn;
 const server = require('http').Server;   				//the http server
 const Gpio = require('onoff').Gpio;
 const socket = require('socket.io');
+const path = require('path');
 
 require('colors');
 
@@ -25,7 +26,7 @@ const CAM = {
 
 // START CAM
 const camera = spawn('node', [
-    '../node_modules/raspberry-pi-mjpeg-server/raspberry-pi-mjpeg-server.js',
+    path.join(__dirname, 'node_modules/raspberry-pi-mjpeg-server/raspberry-pi-mjpeg-server.js'),
     '-p', CAM.PORT,
     '-w', CAM.WIDTH,
     'l', CAM.HEIGHT,
