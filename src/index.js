@@ -484,14 +484,11 @@ app.post('/home/:axis', function (req, res) {
 	if (!regExpAlpha.test(axis)) {
 		return res.send("axis are incorrect! Must be from: x, y, z, e");
 	}
-	
-	if(pronsole) {
-		console.log('-- home ' + axis + ' --');
-		pronsole.stdin.write('home ' + axis + '\n');
-		return res.send('home ' + axis);
-	} 
     
-	return res.send('Error! Pronsole object is not defined.');
+    //    pronsole.stdin.write('home ' + axis + '\n');
+    command.home(req.params.axis)
+    
+    return res.send('home ' + axis);    
 });
 
 // == /extrude/../..
