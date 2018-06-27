@@ -486,7 +486,7 @@ app.post('/home/:axis', function (req, res) {
 	}
     
     //    pronsole.stdin.write('home ' + axis + '\n');
-    command.home(req.params.axis)
+    commands.home(req.params.axis)
     
     return res.send('home ' + axis);    
 });
