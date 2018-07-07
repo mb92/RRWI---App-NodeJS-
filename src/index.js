@@ -166,108 +166,7 @@ app.get('/cameraOff', function(req, res) {
 // end: Camera
 
 
-
-
-//GET:
-// == /exit
-app.get('/exit', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('reset \n');
-		pronsole.stdin.write('off \n');
-		pronsole.stdin.write('exit \n');
-		console.log('-- exit --');
-		return res.send('exit\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
-});
-
-// == /off
-app.get('/off', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('off \n');
-		console.log('-- off --');
-		// return res.send('off\n');
-		res.sendStatus(200);
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
-});
-
-// == /ls
-app.get('/ls', function (req, res) {
-	
-    // var command = spawn('python', ['/home/pi/printrun/pronsole.py','']);
-    
-    // pronsole.stdin.write('ls \n');
-    runCommand('ls', '', '/home/pi/printrun/' );
-	// if(pronsole) {
-	// var command = spawn('/home/pi/printrun/pronsole.py');
-	// 	command.stdin.write('gettemp \n');
-	// 	command.stdout.on('data', function (data) {
-    //    		return res.send('stdout: ' + data);
-    //    	});
-    //    	
-    
-	// runCommand( 'ls', '-tr1', '/home/pi/printerface/gcode_uploads' );
-	return res.send(command_output);
-});
-
-// == /reset
-app.get('/reset', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('reset \n');
-		console.log('-- reset --');
-		return res.send('reset\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
-});
-
-// == /pause
-app.get('/pause', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('pause \n');
-		console.log('-- pause --');
-		return res.send('pause\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
-});
-
-// == /cooldown
-app.get('/cooldown', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('settemp 0 \n');
-		pronsole.stdin.write('bedtemp 0 \n');
-		console.log('-- cooldown --');
-		return res.send('cooldown\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
-});
-
-
-// == /resume
-app.get('/resume', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('resume \n');
-		console.log('-- resume --');
-		return res.send('resume\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
-});
-
-// == /print
-app.get('/print', function (req, res) {
-    // pronsole.stdin.write( 'print \n' );
-        commands.print();
-	return res.send('Start printing!');
-});
-
-
-// == /print
+// command socet input
 app.get('/command/:commandname?', function (req, res) {
     console.log("CMD".blue, req.params.commandname);
     pronsole.stdin.write(decodeURI(req.params.commandname) + '\n');
@@ -275,12 +174,68 @@ app.get('/command/:commandname?', function (req, res) {
 	return res.send('OK');
 });
 
-
-
 var textChunk = null;
-// == /gettemp
+// api status
 app.get('/status', function (req, res) {
     res.send('Node RRWI API is running');
+});
+
+
+
+//GET:
+// == /exit
+app.get('/exit', function (req, res) {
+	commands.exit();
+	console.log('-- exit --');
+	return res.send('exit\n');
+});
+
+// == /off
+app.get('/off', function (req, res) {
+	commands.off();
+	console.log('-- off --');
+	// return res.send('off\n');
+	res.sendStatus(200);
+});
+
+// == /ls
+app.get('/ls', function (req, res) {
+	commands.ls();
+	return res.send(command_output);
+});
+
+// == /reset
+app.get('/reset', function (req, res) {
+	commands.reset();
+	console.log('-- reset --');
+	return res.send('reset\n');
+});
+
+// == /pause
+app.get('/pause', function (req, res) {
+	commands.pause();
+	console.log('-- pause --');
+	return res.send('pause\n');
+});
+
+// == /cooldown
+app.get('/cooldown', function (req, res) {
+	console.log('-- cooldown --');
+	return res.send('cooldown\n');
+});
+
+
+// == /resume
+app.get('/resume', function (req, res) {
+	commands.resume();
+	console.log('-- resume --');
+	return res.send('resume\n');
+});
+
+// == /print
+app.get('/print', function (req, res) {
+    commands.print();
+	return res.send('Start printing!');
 });
 
 // == /gettemp
@@ -311,6 +266,9 @@ app.get('/disconnect', function (req, res) {
 		console.log('-- disconnect --');
 		return res.send('disconnect\n');
 });
+
+
+
 
 
 // //POST:
@@ -371,7 +329,7 @@ app.post('/bedtemp/:temp', function (req, res) {
     
 	if(regExpAlpha.test(temp) || regExpNum.test(temp)) {
 		if(pronsole) {
-			pronsole.stdin.write('bedtemp ' + temp + '\n');
+        	commands.bedtemp({ temp: temp })
 			console.log('-- set bed temperature on: ' + temp + ' --');
 			return res.send('bedtemp ' + temp + '\n');
 		} 
@@ -393,16 +351,7 @@ app.post('/settemp/:temp', function (req, res) {
     
 	if(regExpAlpha.test(temp) || regExpNum.test(temp)) {
         commands.settemp({ temp: temp })
-        //I think pronsole will always be true here
         return res.send('settemp ' + temp + '\n');
-		// if(pronsole) {
-        
-        
-		// 	// pronsole.stdin.write('settemp ' + temp + '\n');
-		// 	// console.log('-- set hotendtemp temperature on: ' + temp + ' --');
-		// } 
-        
-		// return res.send('Error! Pronsole object is not defined.');
 	} else {
 		return res.send("Temperature is incorrect! Must be: abs, pla, off or integer's value");
 	}
@@ -416,8 +365,6 @@ app.post('/home/:axis', function (req, res) {
 	if (!regExpAlpha.test(axis)) {
 		return res.send("axis are incorrect! Must be from: x, y, z, e");
 	}
-    
-    //    pronsole.stdin.write('home ' + axis + '\n');
     commands.home(req.params.axis)
     
     return res.send('home ' + axis);    
@@ -505,13 +452,8 @@ app.post('/upload', jsonParser, function(req, res) {
         if(err) {
             return res.send(err);
         } else {
-            
-            if(pronsole) {
-				console.log('-- load ' + fileName + ' --');
-				pronsole.stdin.write('load ' + fileName + '\n');
-				
-			} 
-            // return res.send('load ' + fileName);
+			console.log('-- load ' + fileName + ' --');
+			pronsole.stdin.write('load ' + fileName + '\n');
         }
 	}); 
     
@@ -536,38 +478,15 @@ app.post('/sdprint/:file', function (req, res) {
 	} 
     
 	return res.send('Error! Pronsole object is not defined.');
-	
 });
-
-
 
 
 // **** Pronsole connection ****
 console.log('pronsole.py is spawned, waiting 3 seconds and sending connect...');
 setTimeout( function(){
     //calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
-    pronsole.stdin.write('connect\n');
+    commands.connect();
 }, 3000 );
-
-// //console.log('pronsole.py is spawned, waiting 3 seconds and sending monitor...');
-// //setTimeout( function(){
-//   //calling connect without params here (todo add ttyUSB etc, but hey the defaults work just fine now ;)
-// //  pronsole.stdin.write('monitor\n'); //cool this just works like we want -> need some ajax though to feed it back to the browser...
-// //}, 3000 );
-
-
-
-// pronsole.stdout.on('data', function (data) {
-//   console.log( 'pronsole: '+data ); //todo use some ajax to feed it to our browser here...
-// });
-
-// pronsole.stderr.on('data', function (data) {
-//   console.log('pronsole err: ' + data);
-// });
-
-// pronsole.stdout.on('end', function(data) {
-//   pronsole.stdout.end();
-// } );
 
 pronsole.on('exit', function (code) {
     if (code !== 0) {

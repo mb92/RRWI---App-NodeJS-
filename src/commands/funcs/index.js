@@ -1,9 +1,18 @@
 module.exports = {
     gettemp: 	require('./gettemp'),
     settemp: 	require('./settemp'),
+    bedtemp: 	require('./bedtemp'),
+    cooldown: 	require('./cooldown'),
    	home: 	 	require('./home'),
    	print: 		require('./print'),
+   	pause: 		require('./pause'),
+   	reset: 		require('./reset'),
+   	off: 		require('./off'),
    	monitor: 	require('./monitor'),
    	monitor: 	require('./monitor2'),
+   	connect: 	require('./connect'),
    	disconnect: require('./disconnect'),
+   	resume: 	require('./resume'),
+   	exit: 		require('./exit'),
+   	ls: 		require('./ls'),
 }
