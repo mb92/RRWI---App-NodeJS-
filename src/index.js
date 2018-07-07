@@ -117,21 +117,6 @@ commandsList.forEach(([commandName, func]) => { commands[commandName] = func })
 
 
 
-
-
-// function sendBufferToResponse(res, buffer) {
-// 	return res.json({
-// 		message: buffer.toString('utf8')
-// 	});
-// }
-
-
-// if ( !pronsole )
-// {
-//  	return res.send('Error! Pronsole object is not defined.');
-// }
-
-
 // **** Routes for api ****
 // =============================================================================
 app.get('/', function(req, res) {
@@ -276,8 +261,8 @@ app.get('/resume', function (req, res) {
 
 // == /print
 app.get('/print', function (req, res) {
-    pronsole.stdin.write( 'print \n' );
-    
+    // pronsole.stdin.write( 'print \n' );
+        commands.print();
 	return res.send('Start printing!');
 });
 
@@ -303,81 +288,28 @@ app.get('/gettemp', function (req, res) {
     // For now this way, in future, we will change this to binding method
     console.log(commands.gettemp)
     commands.gettemp();
-    // console.log("Receiving gettemp");
-    // pronsole.stdin.write('gettemp\n');
-    res.send('Siema');
-    
-    
+    res.send(commands.gettemp);
 });
-
-// pronsole.stdout.on('data',function(chunk){
-
-// textChunk = chunk.toString('utf8');// buffer to string
-// console.log(textChunk);
-// });
-// console.log('-- gettemp --');
-// res.json({asd : 'llll'});
-// res.json({ message: textChunk });
-
-
-app.get('/eta', function (req, res) {
-    if(pronsole) {
-        pronsole.stdin.write('eta \n');
-        pronsole.stdout.on('data',function(chunk){
-            
-            textChunk = chunk.toString('utf8');// buffer to string
-            console.log(textChunk);
-        });
-        console.log('-- eta --');
-        res.send(textChunk);
-        // res.json({ message: textChunk });
-    }
-    
-    res.send('Error! Pronsole object is not defined.');
-});
-
-// == /eta
-// app.get('/eta', function (req, res) {
-// 	if(pronsole) {
-// 		pronsole.stdin.write('eta \n');
-// 		console.log('-- eta --');
-// 		return res.send('eta\n');
-// 	} 
-
-// 	return res.send('Error! Pronsole object is not defined.');
-// });
 
 // == /monitor
 app.get('/monitor', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('monitor \n');
-		console.log('-- monitor --');
-		return res.send('monitor\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
+	commands.monitor();
+	console.log('-- monitor --');
+	return res.send('monitor\n');
 });
 
 // == /monitor2
 app.get('/monitor2', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('monitor2 \n');
-		console.log('-- monitor2 --');
-		return res.send('monitor2\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
+	commands.monitor2();
+	console.log('-- monitor2 --');
+	return res.send('monitor2\n');
 });
 
 // == /disconnect
 app.get('/disconnect', function (req, res) {
-	if(pronsole) {
-		pronsole.stdin.write('disconnect \n');
+		commands.disconnect();
 		console.log('-- disconnect --');
 		return res.send('disconnect\n');
-	} 
-    
-	return res.send('Error! Pronsole object is not defined.');
 });
 
 
