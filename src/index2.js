@@ -300,10 +300,13 @@ app.post('/move/:dir/:dist/:acc?', function (req, res) {
 		return res.send("Distance is incorrect! Must be an integer.");
 	}
     
-    commands.move({ direction: direction, distance: distance });
-	console.log('-- move forward --');
-	return res.send('move ' + direction + ' ' + distance);
+	if(pronsole) {
+		console.log('-- move forward --');
+		return res.send('move ' + direction + ' ' + distance);
+	} 
     
+	return res.send('Error! Pronsole object is not defined.');
+	
 });
 
 
@@ -315,9 +318,13 @@ app.post('/bedtemp/:temp', function (req, res) {
 	var regExpNum = /[0-9*]/;
     
 	if(regExpAlpha.test(temp) || regExpNum.test(temp)) {
-    	commands.bedtemp({ temp: temp })
-		console.log('-- set bed temperature on: ' + temp + ' --');
-		return res.send('bedtemp ' + temp + '\n');
+		if(pronsole) {
+        	commands.bedtemp({ temp: temp })
+			console.log('-- set bed temperature on: ' + temp + ' --');
+			return res.send('bedtemp ' + temp + '\n');
+		} 
+        
+		return res.send('Error! Pronsole object is not defined.');
 	} else {
 		return res.send("Temperature is incorrect! Must be: abs, pla, off or integer's value");
 	}
@@ -374,8 +381,7 @@ app.post('/extrude/:dist/:acc?', function (req, res) {
 	}
     
 	if(pronsole) {
-		// pronsole.stdin.write('extrude ' + distance + ' ' + acceleration + '\n');
-		commands.extrude({distance: distance, acceleration : acceleration});
+		pronsole.stdin.write('extrude ' + distance + ' ' + acceleration + '\n');
 		console.log('-- extrude ' + distance + ' ' + acceleration + ' --');
 		return res.send('extrude ' + distance + ' ' + acceleration);
 	} 
@@ -405,8 +411,7 @@ app.post('/reverse/:dist/:acc?', function (req, res) {
 	}
     
 	if(pronsole) {
-		// pronsole.stdin.write('reverse ' + distance + ' ' + acceleration + '\n');
-		commands.reverse({distance: distance, acceleration : acceleration});
+		pronsole.stdin.write('reverse ' + distance + ' ' + acceleration + '\n');
 		console.log('-- reverse ' + distance + ' ' + acceleration + ' --');
 		return res.send('reverse ' + distance + ' ' + acceleration);
 	} 
@@ -458,7 +463,7 @@ app.post('/sdprint/:file', function (req, res) {
 	
 	if(pronsole) {
 		console.log('-- sdprint ' + file + ' --');
-		commands.sdprint({ file: file });
+		pronsole.stdin.write('sdprint ' + file + '\n');
 		return res.send('sdprint ' + file);
 	} 
     
