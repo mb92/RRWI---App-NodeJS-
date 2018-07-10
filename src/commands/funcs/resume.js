@@ -1,6 +1,6 @@
 /**
- * Command to receive temp info from printer
- */
+ * Command to resume printing process */
+
 module.exports = (pronsole) => (params) => {
     pronsole.stdin.write('resume \n');
 };

@@ -1,4 +1,3 @@
-
 // **** Dependencies ****
 const express = require('express');        // call express
 const bodyParser = require('body-parser');	//call body-parser
@@ -14,7 +13,7 @@ const path = require('path');
 require('colors');
 
 
-// DEFAULT PARAMS
+// DEFAULT PARAMS for CAMERA
 const port = process.env.PORT || 3000;        // set our port
 const CAM = {
     PORT: 4000,
@@ -266,8 +265,6 @@ app.get('/disconnect', function (req, res) {
 		console.log('-- disconnect --');
 		return res.send('disconnect\n');
 });
-
-
 
 
 

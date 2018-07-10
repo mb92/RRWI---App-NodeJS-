@@ -1,5 +1,5 @@
 /**
- * Command to send working temperature value
+ * Command to send working temperature value for hotend
  * @param {*} pronsole 
  * @param {*} params 
  */

@@ -1,5 +1,5 @@
 /**
- * Command to receive temp info from printer
+ * Command to reset printing
  */
 module.exports = (pronsole) => (params) => {
     pronsole.stdin.write('reset \n');

@@ -1,5 +1,5 @@
 /**
- * Command to receive temp info from printer
+ * Command to cooldown ale hating source (hotend and bed)
  */
 module.exports = (pronsole) => (params) => {
 	pronsole.stdin.write('settemp 0 \n');

@@ -1,6 +1,6 @@
 /**
- * Command to receive temp info from printer
+ * Command run linux command in home dir
  */
 module.exports = (pronsole) => (params) => {
-    runCommand('ls', '', '/home/pi/printrun/' );
+    runCommand('ls', '', '/home/pi/' );
 };
