@@ -13,6 +13,6 @@ gpio.setup(23, gpio.OUT)
 gpio.output(18, gpio.LOW)
 
 print 'Power OFF'
-text_file = open("rrwi/py/power_status.txt", "w")
+text_file = open("/home/pi/rrwi/py/power_status.txt", "w")
 text_file.write("0")
 text_file.close()

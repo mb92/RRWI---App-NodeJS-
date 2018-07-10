@@ -13,6 +13,6 @@ gpio.output(23, gpio.HIGH)
 gpio.output(18, gpio.HIGH)
 
 print 'Power ON'
-text_file = open("rrwi/py/power_status.txt", "w")
+text_file = open("/home/pi/rrwi/py/power_status.txt", "w")
 text_file.write("1")
 text_file.close()

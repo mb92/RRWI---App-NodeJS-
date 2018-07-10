@@ -10,7 +10,7 @@ gpio.setmode(gpio.BCM)
 gpio.setup(26, gpio.IN, pull_up_down = gpio.PUD_UP)
 
 def Shutdown(channel):
-    print("dupa")
+    print("test")
 
     gpio.add_event_detect(26, gpio.FALLING, callback = Shutdown, bouncetime = 2000)
 
