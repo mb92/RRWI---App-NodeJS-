@@ -278,7 +278,7 @@ app.post('/connect/:port/:baud', function (req, res) {
 	var port = req.params.port; 
 	var baud = req.params.baud; 
 
-    commands.customconnect({port: port, baud: baud});
+    commands.connect2({port: port, baud: baud});
     // pronsole.stdin.write('connect ' + port + ' ' + baud + '\n');
     console.log('-- connect: ' + port + ' ' + baud + ' --');
     return res.send('connect ' + port + ' ' + baud + '\n');
@@ -458,7 +458,7 @@ app.post('/sdprint/:file', function (req, res) {
 	
 	if(pronsole) {
 		console.log('-- sdprint ' + file + ' --');
-		commands.sdprint({ file: file });
+		commands.sdprint({ file: file});
 		return res.send('sdprint ' + file);
 	} 
     
