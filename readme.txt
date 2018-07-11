@@ -13,5 +13,6 @@ rrwi -> ...
 	- apidoc - file with api description
 	- tmp - temporary dir for sending files for printing. The dir is cleaning with start Debian always.
 	- py - all python files for control power adapter
+	- py/power_status.example.txt must by copied as power_status.txt !!!
 	- src - all files of app
 	- printerface.js - An free application that has inspirated to create RepRapWebInterface - https://github.com/w-A-L-L-e/printerface. This file is not use in rrwi.
